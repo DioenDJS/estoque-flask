@@ -12,7 +12,8 @@
 - [Pillow](https://pillow.readthedocs.io/en/stable/index.html) 
 - [Python-barcode](https://python-barcode.readthedocs.io/en/stable/)
 - [Virtualenv](https://virtualenv.pypa.io/en/latest/)
-
+- [Cerberus](https://docs.python-cerberus.org/) <img align="center" alt="scikit-learn" height="40" width="30" src="https://docs.python-cerberus.org/_static/cerberus.png" />
+- [Pytest](https://docs.pytest.org/en/8.0.x/) <img align="center" alt="scikit-learn" height="40" width="30" src="https://docs.pytest.org/en/8.0.x/_static/pytest_logo_curves.svg" />
 ## Projeto :computer:
 ![image](https://github.com/DioenDJS/estoque-flask/assets/76778401/e523f5c9-12e4-439a-a552-5b03165aba00)
 
@@ -37,6 +38,16 @@
 
 - Python-barcode
 > ``` pip install python-barcode ```
+
+- Cerberus
+> ``` pip install Cerberus ```
+
+- Pytest
+>``` pip install pytest ```
+> 
+> comando para rodar os test
+> 
+> ```pytest -s -v```
 
 ### Criando arquivo .txt com as dependências: 
 > ```venv/Scripts/pip3 freeze > requirements.txt```
