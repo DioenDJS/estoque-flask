@@ -14,5 +14,12 @@ class Product(Model):
     class Meta:
         database = get_connect()
 
-
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'price': self.price,
+            'description': self.description,
+            'tag': self.tag
+        }
 create_table(Product)
