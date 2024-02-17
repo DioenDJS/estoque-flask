@@ -8,10 +8,9 @@ class ProductCreatorController:
     def create(self, product: dict) -> Dict:
         try:
             db = get_connect()
-
             new_product = Product.create(
                 name=product.get('name'),
-                price=product.get('price'),
+                price=int(product.get('price') * 1000),
                 description=product.get('description'),
                 tag=product.get('tag')
             )

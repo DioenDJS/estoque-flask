@@ -2,7 +2,7 @@ from cerberus import Validator
 """
     {
         "name": "Caderno",
-        "price": 1299,
+        "price": 12.99,
         "description": "caderno de um materia"
         "tag": "432535234.4352435.png"
     }
@@ -12,7 +12,7 @@ from cerberus import Validator
 def product_creator_validator(request: any) -> None:
     body_validator = Validator({
         "name": {"type": "string", "required": True, "empty": False},
-        "price": {"type": "integer", "required": True, "empty": False},
+        "price": {"type": "float", "required": True, "empty": False},
         "description": {"type": "string", "required": True, "empty": False},
         "tag": {"type": "string", "required": True, "empty": False},
     })

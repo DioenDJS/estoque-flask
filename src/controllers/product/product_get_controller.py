@@ -18,7 +18,7 @@ class ProductGetController:
                 products = Product.select()
                 print(products)
                 return {
-                    "products": [product.serialize() for product in products]
+                    "products": [{**product.serialize(), "price": "{:.2f}".format(product.price / 1000)} for product in products]
                 }
         except Exception as e:
             print(f"Error: {e}")
