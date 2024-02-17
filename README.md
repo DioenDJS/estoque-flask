@@ -69,10 +69,10 @@
 
 - Create
 
-  ![image](https://github.com/DioenDJS/estoque-flask/assets/76778401/f114ab30-f86d-405d-b96a-1398321ae14b)
+![image](https://github.com/DioenDJS/estoque-flask/assets/76778401/f114ab30-f86d-405d-b96a-1398321ae14b)
 
-- Find All Product
+ - Find All Product
 
-![image](https://github.com/DioenDJS/estoque-flask/assets/76778401/fdb2353f-7127-4a2c-bb15-622f419f835c)
+ ![image](https://github.com/DioenDJS/estoque-flask/assets/76778401/fdb2353f-7127-4a2c-bb15-622f419f835c)
 
 
