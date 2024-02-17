@@ -24,7 +24,8 @@
 ## Como executar :gear:
 
 - Clone o repositório `https://github.com/DioenDJS/estoque-flask.git`.
-- Rode o projeto `{nome do venv} run_raw.py` para iniciar a aplicação.
+- remocer .config do arquivo `.env.config`
+- Rode o projeto `docker-compose up` para iniciar a aplicação.
 - Ao final a aplicação estará disponível em `http://localhost:3000`.
 
 ## Bibliotecas do Projetos :card_index_dividers:
@@ -56,13 +57,22 @@
 
 ### Tag
 
-- Created
+- Create
   
   ![Captura de tela 2024-02-12 180724](https://github.com/DioenDJS/estoque-flask/assets/76778401/d8bd83d0-7d58-4016-9738-d2e7ec3d0cd9)
 
-- Tag(codigo de barra) gerada 
+- Tag(codigo de barra) generated
   
   ![Captura de tela 2024-02-12 181053](https://github.com/DioenDJS/estoque-flask/assets/76778401/35baf4d7-3ad9-418a-8a8b-f1fc9229c360)
 
+### Product
 
-  
+- Create
+
+  ![image](https://github.com/DioenDJS/estoque-flask/assets/76778401/f114ab30-f86d-405d-b96a-1398321ae14b)
+
+- Find All Product
+
+![image](https://github.com/DioenDJS/estoque-flask/assets/76778401/fdb2353f-7127-4a2c-bb15-622f419f835c)
+
+
