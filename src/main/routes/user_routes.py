@@ -2,13 +2,14 @@ from flask import request, jsonify, Blueprint
 from src.validators.user_creator_validator import user_creator_validator
 from src.views.http_types.http_request import HttpRequest
 from src.views.user_view.user_view import UserView
-
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 
 user_routes_bp = Blueprint('user_routes', __name__)
 
 
 @user_routes_bp.route('/user/created', methods=["POST"])
+@jwt_required()
 def create_user():
     resp = None
     try:

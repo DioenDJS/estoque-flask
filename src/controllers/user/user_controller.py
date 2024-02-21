@@ -1,14 +1,13 @@
-from src.main.domain.models.models import User
-import bcrypt
+from src.main.domain.models.models import Users
 from typing import Dict
 from src.database.database import get_connect
-from flask_jwt_extended import create_access_token
+
 class UserController:
 
     def create(self, user: dict) -> Dict:
         try:
             db = get_connect()
-            new_user = User.create(
+            new_user = Users.create(
                 full_name=user.get('full_name'),
                 email=user.get('email'),
                 cpf=user.get('cpf'),
@@ -34,27 +33,4 @@ class UserController:
         }
 
 
-    def auth_token(self, username: str, password: str):
-        try:
 
-            with get_connect():
-                users = User.select().where(User.full_name == username)
-                user = [user.serialize() for user in users]
-                if not user:
-                    raise Exception("User not found!")
-
-                user_check_password = user[0]
-                storage_hashed_passqword = user_check_password.get('password')
-                storage_hashed_passqword_byte = storage_hashed_passqword.encode('utf-8')
-                password_match = bcrypt.checkpw(password.encode('utf-8'), storage_hashed_passqword_byte)
-
-                if password_match:
-                    return create_access_token(identity=username)
-                else:
-                    print("Password is incorrect.")
-
-
-
-
-        except Exception as e:
-            print(e)
