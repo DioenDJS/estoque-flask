@@ -1,4 +1,5 @@
-from src.main.domain.entities.products_entity import Product
+# from src.main.domain.models.products_entity import Product
+from src.main.domain.models.models import Product
 from src.database.database import get_connect
 from typing import Dict
 

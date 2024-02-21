@@ -2,13 +2,14 @@ from flask import request, jsonify, Blueprint
 from src.views.product_view.product_view import ProductView
 from src.validators.product_creator_validator import product_creator_validator
 from src.views.http_types.http_request import HttpRequest
-from src.controllers.product.product_creator_controller import ProductCreatorController
+from flask_jwt_extended import jwt_required
 
 
 product_routes_bp = Blueprint('product_routes', __name__)
 
 
 @product_routes_bp.route('/produto', methods=["POST"])
+@jwt_required()
 def create_product():
     resp = None
     try:

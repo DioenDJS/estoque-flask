@@ -20,3 +20,5 @@ def create_tags():
     except Exception as exception:
         resp = handle_errors(exception)
     return jsonify(resp.body), resp.status_code[0]
+
+
