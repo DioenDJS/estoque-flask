@@ -79,7 +79,7 @@ class UsersRoles(BaseModel):
 
 class Employees(BaseModel):
         id = UUIDField(primary_key=True, default=uuid.uuid4)
-        user = ForeignKeyField(Users, backref='employee', column_name='user_id', lazy_load=True)
+        user = ForeignKeyField(Users, backref='employee', column_name='user_id', lazy_load=True, on_delete='CASCADE')
         departament = CharField(unique=True, null=False)
         salary = IntegerField(null=False)
 

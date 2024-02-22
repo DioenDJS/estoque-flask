@@ -23,3 +23,22 @@ class EmployeeView:
         result = employee_controller.find_all()
 
         return HttpResponse(status_code=200, body=result)
+
+
+    def find_by_id(self, id: str) -> HttpResponse:
+
+        employee_controller = EmployeeController()
+
+        result = employee_controller.find_by_id_view(id)
+
+        return HttpResponse(status_code=200, body=result)
+
+
+
+    def delete(self, id: str) -> HttpResponse:
+
+        employee_controller = EmployeeController()
+
+        result = employee_controller.one_delete(id)
+
+        return HttpResponse(status_code=200, body=result)

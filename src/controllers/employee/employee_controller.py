@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Union
 from src.database.database import get_connect
 from src.main.domain.models.models import Users
 from src.main.domain.models.models import Employees
@@ -51,6 +51,47 @@ class EmployeeController:
                 "id": id_created_product
             }
         }
+
+    def find_by_id_view(self, id: str) -> Union[Dict, None]:
+        try:
+            query = Employees.select().join(Users).where(Employees.id == id).first()
+            employee = query
+            if employee:
+                return {"employee": employee.serialize()}  # Assuming you have a to_dict method in your model
+            else:
+                return {"error": "Employee not found"}, 404
+        except Exception as e:
+            print(e)
+            return {"error": str(e)}, 500
+
+
+    def one_delete(self, id: str) -> Dict:
+        try:
+
+            db = get_connect()
+            query = Employees.select().join(Users).where(Employees.id == id).first()
+            employee = query.serialize()
+
+            id_employee_deleted = employee.get('id')
+
+            user = Users.get(Users.id == employee.get('user_id').get('id'))
+
+
+            if not employee:
+                raise(f"Not found employee !")
+            query_delete = Employees.delete().where(Employees.id == id)
+            query_delete.execute()
+
+            user_role_delete = UsersRoles.delete().where(UsersRoles.user_id == user)
+            user_role_delete.execute()
+
+            return {"id": id_employee_deleted}
+
+        except Exception as e:
+            print(e)
+
+
+
 
 
     @staticmethod
