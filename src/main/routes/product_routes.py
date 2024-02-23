@@ -2,7 +2,7 @@ from flask import request, jsonify, Blueprint
 from src.views.product_view.product_view import ProductView
 from src.validators.product_creator_validator import product_creator_validator
 from src.views.http_types.http_request import HttpRequest
-from src.controllers.product.product_creator_controller import ProductCreatorController
+from src.controllers.product.product_controller import ProductCreatorController
 
 
 product_routes_bp = Blueprint('product_routes', __name__)
