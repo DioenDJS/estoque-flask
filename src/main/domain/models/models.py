@@ -105,6 +105,27 @@ def create_initial_roles(roles_data):
             pass
 
 
+def create_admin_user():
+    admin_role = Roles.get(Roles.nome == 'ADMIN')
+
+    with db.atomic():
+        try:
+            admin_user = Users.create(
+                full_name='Admin User',
+                email='admin@example.com',
+                cpf='12345678900',
+                smartphone='123456789',
+                password='admin_password',
+                role=admin_role
+            )
+            admin_user.set_password('admin_password')
+            admin_user.save()
+            UsersRoles.create(user_id=admin_user, role_id=admin_role)
+        except IntegrityError:
+            pass
+
+
+
 db.create_tables([Products, Users, Employees, Roles, UsersRoles], safe=True)
 
 
@@ -112,3 +133,4 @@ db.create_tables([Products, Users, Employees, Roles, UsersRoles], safe=True)
 # Inicializar as roles
 roles_to_seed = ['ADMIN', 'PROVIDER', 'SELLER', 'CLIENT']
 create_initial_roles(roles_to_seed)
+create_admin_user()
