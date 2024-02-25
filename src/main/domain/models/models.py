@@ -1,10 +1,25 @@
 from peewee import Model, CharField, IntegerField, AutoField, IntegrityError, ManyToManyField
 from playhouse.postgres_ext import UUIDField
 from src.database.database import get_connect
+from typing import Union, Type
+from enum import Enum
 import bcrypt
 import uuid
 
 db = get_connect()
+
+
+class UserRoleEnum(Enum):
+    ADMIN = 'ADMIN'
+    CLIENT = 'CLIENT'
+    PROVIDER = 'PROVIDER'
+    SELLER = 'SELLER'
+
+    @classmethod
+    def get(cls: Type['UserRoleEnum'], value: Union[str, 'UserRoleEnum']) -> 'UserRoleEnum':
+        if isinstance(value, cls):
+            return value
+        return cls[value]
 
 
 class BaseModel(Model):
@@ -33,6 +48,15 @@ class Products(BaseModel):
 class Roles(BaseModel):
     id = AutoField(primary_key=True)
     nome = CharField(unique=True)
+
+    @classmethod
+    def create_roles(cls):
+        with db.atomic():
+            try:
+                for role_enum in UserRoleEnum:
+                    cls.get_or_create(nome=role_enum.value)
+            except IntegrityError as e:
+                print(f"Erro ao criar roles: {e}")
 
     def serialize(self):
         return {
@@ -71,17 +95,11 @@ class Users(BaseModel):
         }
 
 
-def create_initial_roles(roles_data):
-    with db.atomic():
-        try:
-            for role_name in roles_data:
-                Roles.get_or_create(nome=role_name)
-        except IntegrityError:
-            pass
-
+def create_initial_roles():
+    Roles.create_roles()
 
 def create_admin_user():
-    admin_role = Roles.get(Roles.nome == 'ADMIN')
+    admin_role = Roles.get(Roles.nome == UserRoleEnum.ADMIN.value)
 
     with db.atomic():
         try:
@@ -101,6 +119,5 @@ def create_admin_user():
 db.create_tables([Products, Users, Roles, Users.roles.get_through_model()], safe=True)
 
 
-roles_to_seed = ['ADMIN', 'PROVIDER', 'SELLER', 'CLIENT']
-create_initial_roles(roles_to_seed)
+create_initial_roles()
 create_admin_user()
