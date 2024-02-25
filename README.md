@@ -76,3 +76,36 @@
  ![image](https://github.com/DioenDJS/estoque-flask/assets/76778401/fdb2353f-7127-4a2c-bb15-622f419f835c)
 
 
+### User
+
+- Create
+![Captura de tela 2024-02-25 101807](https://github.com/DioenDJS/estoque-flask/assets/76778401/4a31e1ea-5469-47b3-a54c-9e25360dbd95)
+
+
+### Auth
+
+- Login
+![Captura de tela 2024-02-25 101233](https://github.com/DioenDJS/estoque-flask/assets/76778401/9f9bfa22-8923-44b6-aa00-0bae34fd2080)
+
+
+![image](https://github.com/DioenDJS/estoque-flask/assets/76778401/ea8bb34d-597b-42ce-9651-112611d7a149)
+>script pra setar o token gerado em uma variavel de ambiente do Postman
+```
+// Extrai o access_token da resposta
+var jsonData = JSON.parse(responseBody);
+var accessToken = jsonData.access_token;
+
+// Define o access_token como variável de ambiente
+pm.environment.set("access_token", accessToken);
+```
+
+
+
+
+
+
+
+
+
+  
+
