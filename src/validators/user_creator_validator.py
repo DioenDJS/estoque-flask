@@ -19,6 +19,7 @@ def user_creator_validator(request: any) -> None:
         "cpf": {"type": "string", "required": True, "empty": False, "regex": r'^\d{11}$'},
         "smartphone": {"type": "string", "required": True, "empty": False, "regex": r'^\d{10}$'},
         "password": {"type": "string", "required": True, "empty": False},
+        "roles": {"type": "string", "required": True, "empty": False},
     })
     response = body_validator.validate(request.json)
     print(response)
