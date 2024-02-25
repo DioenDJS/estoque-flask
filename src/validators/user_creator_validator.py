@@ -3,11 +3,12 @@ from cerberus import Validator
 """
     VALIDAR OBJETO USUARIO
     {
-        full_name = Nome completo do usuario
-        email = usuarioemail@gmail.com
-        cpf = 00000000000
-        smartphone = 5399999999
-        password = senhausuario
+        full_name = "Nome completo do usuario"
+        email = "usuarioemail@gmail.com"
+        cpf = "00000000000"
+        smartphone = "5399999999"
+        password = "senhausuario"
+        roles: "CLIENT" 
     }
 """
 

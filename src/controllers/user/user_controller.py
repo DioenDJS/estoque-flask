@@ -1,4 +1,4 @@
-from src.main.domain.models.models import Users, Roles
+from src.main.domain.models.models import Users, Roles, UserRoleEnum
 from typing import Dict
 from src.database.database import get_connect
 
@@ -8,8 +8,6 @@ class UserController:
     def create(self, user: dict) -> Dict:
         try:
             db = get_connect()
-
-            role_names = user.get('roles', [])
 
             with db.atomic():
                 new_user = Users.create(
@@ -22,10 +20,9 @@ class UserController:
 
                 new_user.set_password(user.get('password'))
 
-                # Get or create roles and assign them to the user
-                for role_name in role_names:
-                    role, _ = Roles.get_or_create(nome=role_name)
-                    new_user.roles.add(role)
+                role_enum = UserRoleEnum.get(user.get('roles'))
+                role, _ = Roles.get_or_create(nome=role_enum.value)
+                new_user.roles.add(role)
 
                 new_user.save()
 
