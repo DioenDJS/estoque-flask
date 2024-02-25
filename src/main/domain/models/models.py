@@ -1,4 +1,4 @@
-from peewee import Model, CharField, IntegerField, ForeignKeyField, AutoField, IntegrityError
+from peewee import Model, CharField, IntegerField, AutoField, IntegrityError, ManyToManyField
 from playhouse.postgres_ext import UUIDField
 from src.database.database import get_connect
 import bcrypt
@@ -48,7 +48,7 @@ class Users(BaseModel):
     cpf = CharField(unique=True, null=False)
     smartphone = CharField(unique=True, null=False)
     password = CharField(null=False)
-    role = ForeignKeyField(Roles, backref='user', column_name='role_id', lazy_load=True)
+    roles = ManyToManyField(Roles, backref='users')
 
     def __hash_password(self, raw_password) -> bytes:
         return bcrypt.hashpw(raw_password.encode('utf-8'), bcrypt.gensalt())
@@ -67,21 +67,15 @@ class Users(BaseModel):
             'cpf': self.cpf,
             'smartphone': self.smartphone,
             'password': self.password,
-            'role': self.role.serialize() if self.role else None
+            'roles': [role.serialize() for role in self.roles],
         }
-
-
-class UsersRoles(BaseModel):
-    id = AutoField(primary_key=True)
-    user_id = ForeignKeyField(Users, backref='usersroles', column_name='user_id', on_delete='CASCADE')
-    role_id = ForeignKeyField(Roles, backref='usersroles', column_name='role_id', on_delete='CASCADE')
 
 
 def create_initial_roles(roles_data):
     with db.atomic():
         try:
             for role_name in roles_data:
-                Roles.create(nome=role_name)
+                Roles.get_or_create(nome=role_name)
         except IntegrityError:
             pass
 
@@ -96,17 +90,15 @@ def create_admin_user():
                 email='admin@example.com',
                 cpf='12345678900',
                 smartphone='123456789',
-                password='admin_password',
-                role=admin_role
+                password='admin_password'
             )
             admin_user.set_password('admin_password')
+            admin_user.roles.add(admin_role)
             admin_user.save()
-            UsersRoles.create(user_id=admin_user, role_id=admin_role)
         except IntegrityError:
             pass
 
-
-db.create_tables([Products, Users, Roles, UsersRoles], safe=True)
+db.create_tables([Products, Users, Roles, Users.roles.get_through_model()], safe=True)
 
 
 roles_to_seed = ['ADMIN', 'PROVIDER', 'SELLER', 'CLIENT']
