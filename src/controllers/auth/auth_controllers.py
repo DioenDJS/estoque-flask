@@ -25,7 +25,7 @@ class AuthController:
                 if password_match:
                     identity_data = {
                         'username': username,
-                        'roles': [user_check_password.get('role').get('nome')],
+                        'roles': [role.get('nome') for role in user_check_password.get('roles', [])],
                     }
                     return create_access_token(identity=identity_data)
                 else:
