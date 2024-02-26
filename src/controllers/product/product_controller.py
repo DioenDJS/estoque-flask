@@ -3,7 +3,7 @@ from src.database.database import get_connect
 from typing import Dict
 
 
-class ProductCreatorController:
+class ProductController:
 
     def create(self, product: dict) -> Dict:
         try:
@@ -28,8 +28,6 @@ class ProductCreatorController:
             }
         }
 
-
-class ProductGetController:
 
     @staticmethod
     def get_all() -> Dict:
