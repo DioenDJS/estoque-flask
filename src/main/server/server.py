@@ -1,6 +1,7 @@
 from src.main.routes.tag_routes import tags_routes_bp
 from src.main.routes.product_routes import product_routes_bp
 from src.main.routes.user_routes import user_routes_bp
+from src.main.routes.employee_routes import employee_routes_bp
 from datetime import timedelta
 from src.auth.auth import auth_bp
 from flask import Flask
@@ -18,6 +19,4 @@ app.register_blueprint(auth_bp, url_prefix='/auth')
 app.register_blueprint(tags_routes_bp)
 app.register_blueprint(product_routes_bp)
 app.register_blueprint(user_routes_bp)
-
-
-
+app.register_blueprint(employee_routes_bp)

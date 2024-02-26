@@ -1,4 +1,4 @@
-from peewee import Model, CharField, IntegerField, AutoField, IntegrityError, ManyToManyField
+from peewee import Model, CharField, IntegerField, AutoField, IntegrityError, ManyToManyField, ForeignKeyField
 from playhouse.postgres_ext import UUIDField
 from src.database.database import get_connect
 from typing import Union, Type
@@ -45,6 +45,7 @@ class Products(BaseModel):
             'tag': self.tag
         }
 
+
 class Roles(BaseModel):
     id = AutoField(primary_key=True)
     nome = CharField(unique=True)
@@ -72,7 +73,7 @@ class Users(BaseModel):
     cpf = CharField(unique=True, null=False)
     smartphone = CharField(unique=True, null=False)
     password = CharField(null=False)
-    roles = ManyToManyField(Roles, backref='users')
+    roles = ManyToManyField(Roles, backref='users', on_delete='CASCADE')
 
     def __hash_password(self, raw_password) -> bytes:
         return bcrypt.hashpw(raw_password.encode('utf-8'), bcrypt.gensalt())
@@ -95,8 +96,23 @@ class Users(BaseModel):
         }
 
 
+class Employees(BaseModel):
+    id = UUIDField(primary_key=True, default=uuid.uuid4)
+    user = ForeignKeyField(Users, backref='employees', column_name='user_id', lazy_load=True, on_delete='CASCADE')
+    salary = IntegerField(null=False)
+
+    def serialize(self):
+        return {
+            'id': str(self.id),
+            'user_id': self.user.serialize(),
+            # 'departament': self.departament,
+            'salary': self.salary,
+        }
+
+
 def create_initial_roles():
     Roles.create_roles()
+
 
 def create_admin_user():
     admin_role = Roles.get(Roles.nome == UserRoleEnum.ADMIN.value)
@@ -116,7 +132,8 @@ def create_admin_user():
         except IntegrityError:
             pass
 
-db.create_tables([Products, Users, Roles, Users.roles.get_through_model()], safe=True)
+
+db.create_tables([Products, Employees, Users, Roles, Users.roles.get_through_model()], safe=True)
 
 
 create_initial_roles()
