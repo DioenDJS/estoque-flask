@@ -99,6 +99,19 @@ var accessToken = jsonData.access_token;
 pm.environment.set("access_token", accessToken);
 ```
 
+### Employee
+
+- create
+![Captura de tela 2024-02-26 122320](https://github.com/DioenDJS/estoque-flask/assets/76778401/6cea6161-cb9a-4594-b72c-57e5dea49907)
+
+- list all
+![Captura de tela 2024-02-26 122450](https://github.com/DioenDJS/estoque-flask/assets/76778401/98b2f526-2e6f-40e4-a6b6-57444e688638)
+
+- list by id
+![Captura de tela 2024-02-26 122609](https://github.com/DioenDJS/estoque-flask/assets/76778401/36c973b9-42dd-451b-b863-b62738d0b2b6)
+
+- delete
+![image](https://github.com/DioenDJS/estoque-flask/assets/76778401/90223628-7201-4d8f-84bb-32e211bf65f2)
 
 
 
