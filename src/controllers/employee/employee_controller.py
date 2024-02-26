@@ -1,41 +1,69 @@
 from typing import Dict, Union
 from src.database.database import get_connect
-from src.main.domain.models.models import Users, Employees, UserRoleEnum, Roles
-from peewee import IntegrityError
+from src.main.domain.models.models import (
+    Users,
+    Employees,
+    UserRoleEnum,
+    Roles,
+    DepartmentEnum,
+    Departments
+)
+
 
 
 class EmployeeController:
 
 
     def create(self, employee: dict) -> Dict:
-        try:
-            db = get_connect()
 
-            new_user = Users.create(
-                full_name=employee.get('full_name'),
-                email=employee.get('email'),
-                cpf=employee.get('cpf'),
-                smartphone=employee.get('smartphone'),
-                password=employee.get('password'),
+        db = get_connect()
+        with db.atomic() as txn:
+            try:
+                new_user = Users.create(
+                    full_name=employee.get('full_name'),
+                    email=employee.get('email'),
+                    cpf=employee.get('cpf'),
+                    smartphone=employee.get('smartphone'),
+                    password=employee.get('password'),
 
-            )
-            new_user.set_password(employee.get('password'))
+                )
+                new_user.set_password(employee.get('password'))
 
-            role_enum = UserRoleEnum.get(employee.get('roles'))
-            role, _ = Roles.get_or_create(nome=role_enum.value)
-            new_user.roles.add(role)
-            new_user.save()
+                department_enum = DepartmentEnum.get(employee.get('department'))
 
-            new_employee = Employees.create(
-                user=new_user.id,
-                salary=int(employee.get('salary') * 1000)
-            )
+                roles_related_to_department = None
+                if department_enum:
+                    if department_enum.value == 'MANAGER':
+                        roles_related_to_department = 'ADMIN'
+                    if department_enum.value == 'SELLERS':
+                        roles_related_to_department = 'SELLER'
+                    if department_enum.value == 'STOCKIST':
+                        roles_related_to_department = 'USER'
 
-            id = new_employee.id
-            new_employee.save()
-            return self.__format(id)
-        except Exception as e:
-            print(e)
+
+                role_enum = UserRoleEnum.get(roles_related_to_department)
+                role, _ = Roles.get_or_create(nome=role_enum.value)
+                new_user.roles.add(role)
+
+                new_user.save()
+
+                department, _= Departments.get_or_create(name=department_enum.value)
+
+
+                new_employee = Employees.create(
+                    user=new_user.id,
+                    department=department.id,
+                    salary=int(employee.get('salary') * 1000)
+                )
+
+                id = new_employee.id
+                new_employee.save()
+                txn.commit()
+                return self.__format(id)
+            except Exception as err:
+                txn.rollback()
+                print(err)
+
 
 
     def __format(self, id_created_product: str) -> Dict:

@@ -8,7 +8,7 @@ from cerberus import Validator
         cpf = "00000000000"
         smartphone = "5399999999"
         password = "senhausuario"
-        roles: "CLIENT" 
+        department: "MANAGER" 
         salary: 1579.00
     }
 """
@@ -21,7 +21,7 @@ def employee_creator_validator(request: any) -> None:
         "cpf": {"type": "string", "required": True, "empty": False, "regex": r'^\d{11}$'},
         "smartphone": {"type": "string", "required": True, "empty": False, "regex": r'^\d{10}$'},
         "password": {"type": "string", "required": True, "empty": False},
-        "roles": {"type": "string", "required": True, "empty": False},
+        "department": {"type": "string", "required": True, "empty": False},
         "salary": {"type": "float", "required": True, "empty": False},
     })
     response = body_validator.validate(request.json)

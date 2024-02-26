@@ -14,6 +14,7 @@ class UserRoleEnum(Enum):
     CLIENT = 'CLIENT'
     PROVIDER = 'PROVIDER'
     SELLER = 'SELLER'
+    USER = 'USER'
 
     @classmethod
     def get(cls: Type['UserRoleEnum'], value: Union[str, 'UserRoleEnum']) -> 'UserRoleEnum':
@@ -40,13 +41,11 @@ class BaseModel(Model):
 
 
 class Products(BaseModel):
-
     id = CharField(primary_key=True, default=str(uuid.uuid4()))
     name = CharField()
     price = IntegerField()
     description = CharField()
     tag = CharField()
-
 
     def serialize(self):
         return {
@@ -131,13 +130,14 @@ class Departments(BaseModel):
 class Employees(BaseModel):
     id = UUIDField(primary_key=True, default=uuid.uuid4)
     user = ForeignKeyField(Users, backref='employees', column_name='user_id', lazy_load=True, on_delete='CASCADE')
+    department = ForeignKeyField(Departments, backref='employees', column_name='department_id', lazy_load=True)
     salary = IntegerField(null=False)
 
     def serialize(self):
         return {
             'id': str(self.id),
             'user_id': self.user.serialize(),
-            # 'departament': self.departament,
+            'departament_id': self.department.serialize(),
             'salary': self.salary,
         }
 
@@ -170,7 +170,6 @@ def create_admin_user():
 
 
 db.create_tables([Products, Departments, Employees, Users, Roles, Users.roles.get_through_model()], safe=True)
-
 
 create_initial_roles()
 create_initial_departments()
