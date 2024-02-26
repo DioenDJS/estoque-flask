@@ -22,6 +22,18 @@ class UserRoleEnum(Enum):
         return cls[value]
 
 
+class DepartmentEnum(Enum):
+    MANAGER = 'MANAGER'
+    STOCKIST = 'STOCKIST'
+    SELLERS = 'SELLERS'
+
+    @classmethod
+    def get(cls: Type['DepartmentEnum'], value: Union[str, 'DepartmentEnum']) -> 'DepartmentEnum':
+        if isinstance(value, cls):
+            return value
+        return cls[value]
+
+
 class BaseModel(Model):
     class Meta:
         database = db
@@ -96,6 +108,26 @@ class Users(BaseModel):
         }
 
 
+class Departments(BaseModel):
+    id = AutoField(primary_key=True)
+    name = CharField(unique=True)
+
+    @classmethod
+    def create_departments(cls):
+        with db.atomic():
+            try:
+                for departmen_enum in DepartmentEnum:
+                    cls.get_or_create(name=departmen_enum.value)
+            except IntegrityError as e:
+                print(f"Erro ao criar Departments: {e}")
+
+    def serialize(self):
+        return {
+            'id': str(self.id),
+            'name': self.name
+        }
+
+
 class Employees(BaseModel):
     id = UUIDField(primary_key=True, default=uuid.uuid4)
     user = ForeignKeyField(Users, backref='employees', column_name='user_id', lazy_load=True, on_delete='CASCADE')
@@ -112,6 +144,10 @@ class Employees(BaseModel):
 
 def create_initial_roles():
     Roles.create_roles()
+
+
+def create_initial_departments():
+    Departments.create_departments()
 
 
 def create_admin_user():
@@ -133,8 +169,9 @@ def create_admin_user():
             pass
 
 
-db.create_tables([Products, Employees, Users, Roles, Users.roles.get_through_model()], safe=True)
+db.create_tables([Products, Departments, Employees, Users, Roles, Users.roles.get_through_model()], safe=True)
 
 
 create_initial_roles()
+create_initial_departments()
 create_admin_user()
