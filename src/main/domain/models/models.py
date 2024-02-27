@@ -1,4 +1,4 @@
-from peewee import Model, CharField, IntegerField, AutoField, IntegrityError, ManyToManyField, ForeignKeyField
+from peewee import Model, CharField, IntegerField, AutoField, IntegrityError, ManyToManyField, ForeignKeyField, BooleanField
 from playhouse.postgres_ext import UUIDField
 from src.database.database import get_connect
 from typing import Union, Type
@@ -84,6 +84,8 @@ class Users(BaseModel):
     cpf = CharField(unique=True, null=False)
     smartphone = CharField(unique=True, null=False)
     password = CharField(null=False)
+    verification_code = IntegerField(null=True)
+    validate_access = BooleanField(null=False, default=True)
     roles = ManyToManyField(Roles, backref='users', on_delete='CASCADE')
 
     def __hash_password(self, raw_password) -> bytes:
