@@ -19,7 +19,7 @@ def employee_creator_validator(request: any) -> None:
         "full_name": {"type": "string", "required": True, "empty": False},
         "email": {"type": "string", "required": True, "empty": False, "regex": r'^\S+@\S+\.\S+$'},
         "cpf": {"type": "string", "required": True, "empty": False, "regex": r'^\d{11}$'},
-        "smartphone": {"type": "string", "required": True, "empty": False, "regex": r'^\d{10}$'},
+        "smartphone": {"type": "string", "required": True, "empty": False, "regex": r'^\d{11}$'},
         "password": {"type": "string", "required": True, "empty": False},
         "department": {"type": "string", "required": True, "empty": False},
         "salary": {"type": "float", "required": True, "empty": False},
