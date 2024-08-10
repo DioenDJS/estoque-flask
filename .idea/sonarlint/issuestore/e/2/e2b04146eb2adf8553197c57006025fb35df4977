@@ -1,0 +1,10 @@
+
+tpython:S5886."WReturn a value of type "dict" instead of "tuple" or update function "create" type hint.( ÉÍÄøÿÿÿÿ
+?python:S1481,"'Remove the unused local variable "err".(é½ã™
+Hpython:S5806("+Rename this variable; it shadows a builtin.(ŒØßıÿÿÿÿ
+tpython:S5886S"WReturn a value of type "dict" instead of "tuple" or update function "update" type hint.( ÉÍÄøÿÿÿÿ
+fpython:S5632@"IChange this code so that it raises an object deriving from BaseException.(Â•Î÷ıÿÿÿÿ
+;python:S125B"Remove this commented out code.(Ü÷ä–ÿÿÿÿÿ
+6python:S125D"Remove this commented out code.(İÔ´®
+ƒpython:S5886]"lReturn a value of type "Union[dict, NoneType]" instead of "tuple" or update function "find_by_id" type hint.(»Ûåi
+‰python:S5886`"lReturn a value of type "Union[dict, NoneType]" instead of "tuple" or update function "find_by_id" type hint.( ÉÍÄøÿÿÿÿ

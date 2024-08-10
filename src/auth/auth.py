@@ -1,5 +1,7 @@
 from flask import Blueprint, jsonify, request
-from src.controllers.auth.auth_controllers import AuthController
+from src.controllers.auth.auth_controller import AuthController
+from src.validators.auth.auth_validator import auth_validator
+from src.views.http_types.http_request import HttpRequest
 
 auth_bp = Blueprint('auth', __name__)
 
@@ -14,13 +16,13 @@ def login():
 
     resp = None
     try:
-        user_name = request.json.get('username')
-        password = request.json.get('password')
-
         user_auth = AuthController()
 
-        access_token = user_auth.auth_token(user_name, password)
-        print(f"Username: {user_name}, Password: {password}, Access Token: {access_token}")
+        auth_validator(request)
+
+        http_request = HttpRequest(body=request.json)
+
+        access_token = user_auth.auth_token(http_request)
         resp = jsonify(access_token=access_token), 200
     except Exception as e:
         resp = jsonify({"error": "Credenciais inválidas"}), 401

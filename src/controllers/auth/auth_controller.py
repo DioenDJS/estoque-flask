@@ -1,31 +1,27 @@
 from src.main.domain.models.models import Users
+from src.views.http_types.http_response import HttpResponse
+from src.views.http_types.http_request import HttpRequest
 from src.database.database import get_connect
 from flask import jsonify
 from flask_jwt_extended import create_access_token, verify_jwt_in_request, get_jwt_identity
 from functools import wraps
-import bcrypt
 
 
 class AuthController:
 
-    def auth_token(self, username: str, password: str):
+    def auth_token(self, http_request: HttpRequest) -> HttpResponse:
         try:
-
             with get_connect():
-                users = Users.select().where(Users.full_name == username)
-                user = [user.serialize() for user in users]
+                user, _ = Users.get_or_create(full_name=http_request.body.get("username"))
                 if not user:
                     raise Exception("User not found!")
 
-                user_check_password = user[0]
-                storage_hashed_passqword = user_check_password.get('password')
-                storage_hashed_passqword_byte = storage_hashed_passqword.encode('utf-8')
-                password_match = bcrypt.checkpw(password.encode('utf-8'), storage_hashed_passqword_byte)
+                user_check_password = user.check_password(http_request.body.get("password"))
 
-                if password_match:
+                if user_check_password:
                     identity_data = {
-                        'username': username,
-                        'roles': [role.get('nome') for role in user_check_password.get('roles', [])],
+                        'username': http_request.body.get("username"),
+                        'roles': [role.nome for role in user.roles],
                     }
                     return create_access_token(identity=identity_data)
                 else:

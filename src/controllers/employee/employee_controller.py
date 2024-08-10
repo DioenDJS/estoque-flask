@@ -1,5 +1,7 @@
 from typing import Dict, Union
 from src.database.database import get_connect
+from src.main.domain.enums.AccessStatus import AccessStatusEnum
+from src.controllers.user.user_controller import UserController
 from src.main.domain.models.models import (
     Users,
     Employees,
@@ -9,6 +11,7 @@ from src.main.domain.models.models import (
     Departments
 )
 
+user_controller = UserController()
 
 class EmployeeController:
 
@@ -16,41 +19,20 @@ class EmployeeController:
     def create(self, employee: dict) -> Dict:
 
         db = get_connect()
-        with db.atomic() as txn:
+        with (db.atomic() as txn):
             try:
-                new_user = Users.create(
-                    full_name=employee.get('full_name'),
-                    email=employee.get('email'),
-                    cpf=employee.get('cpf'),
-                    smartphone=employee.get('smartphone'),
-                    password=employee.get('password'),
 
-                )
-                new_user.set_password(employee.get('password'))
+                employee["validate_access"] = AccessStatusEnum.INACTIVE.value
+                relo = self.__set_role_emplotee(employee.get('department'))
+                employee["roles"] = relo
+
+                new_user = user_controller.create(employee)
 
                 department_enum = DepartmentEnum.get(employee.get('department'))
-
-                roles_related_to_department = None
-                if department_enum:
-                    if department_enum.value == 'MANAGER':
-                        roles_related_to_department = 'ADMIN'
-                    if department_enum.value == 'SELLERS':
-                        roles_related_to_department = 'SELLER'
-                    if department_enum.value == 'STOCKIST':
-                        roles_related_to_department = 'USER'
-
-
-                role_enum = UserRoleEnum.get(roles_related_to_department)
-                role, _ = Roles.get_or_create(nome=role_enum.value)
-                new_user.roles.add(role)
-
-                new_user.save()
-
                 department, _= Departments.get_or_create(name=department_enum.value)
 
-
                 new_employee = Employees.create(
-                    user=new_user.id,
+                    user=new_user.get('data').get('id'),
                     department=department.id,
                     salary=int(employee.get('salary') * 1000)
                 )
@@ -61,8 +43,7 @@ class EmployeeController:
                 return self.__format(id)
             except Exception as err:
                 txn.rollback()
-                print(err)
-
+                return {"error": str(e)}, 500
 
 
     def __format(self, id_created_product: str) -> Dict:
@@ -71,6 +52,36 @@ class EmployeeController:
                 "id": id_created_product
             }
         }
+
+
+    def update(self, id: str, employee: dict) -> Dict:
+        db = get_connect()
+        with db.atomic() as txn:
+            try:
+                employee_search = Employees.get_by_id(id)
+
+                if not employee_search:
+                    raise("FOUND NOT EMPLOYEE ")
+
+                # user_search = Users.get_by_id(employee_search.user.id)
+
+                # for field, value in employee.items():
+                #     setattr(user_search, field, value)
+                #
+                # user_search.save()
+
+                affected_rows = Employees.update(**employee).where(Employees.id == id).execute()
+
+                # Verifique se algum registro foi atualizado
+                if affected_rows == 0:
+                    raise Exception("No employee record was updated")
+
+                txn.commit()
+                return affected_rows
+            except Exception as e:
+                txn.rollback()
+                return {"error": str(e)}, 500
+
 
     def find_by_id(self, id: str) -> Union[Dict, None]:
         try:
@@ -104,8 +115,8 @@ class EmployeeController:
         except Exception as e:
             print(e)
 
-    @staticmethod
-    def find_all() -> Dict:
+    @classmethod
+    def find_all(cls) -> Dict:
 
         try:
             with get_connect():
@@ -115,4 +126,20 @@ class EmployeeController:
             print(e)
 
 
+    @classmethod
+    def __set_role_emplotee(cls, department: str):
+        department_enum = DepartmentEnum.get(department)
 
+        roles_related_to_department = None
+        if department_enum:
+            if department_enum.value == 'MANAGER':
+                roles_related_to_department = 'ADMIN'
+            if department_enum.value == 'SELLERS':
+                roles_related_to_department = 'SELLER'
+            if department_enum.value == 'STOCKIST':
+                roles_related_to_department = 'USER'
+
+        role_enum = UserRoleEnum.get(roles_related_to_department)
+        role = role_enum.value
+
+        return role

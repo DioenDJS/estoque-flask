@@ -1,5 +1,5 @@
 from flask import request, jsonify, Blueprint
-from src.controllers.auth.auth_controllers import AuthController
+from src.controllers.auth.auth_controller import AuthController
 from src.views.product_view.product_view import ProductView
 from src.validators.product_creator_validator import product_creator_validator
 from src.views.http_types.http_request import HttpRequest

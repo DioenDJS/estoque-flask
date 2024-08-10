@@ -17,7 +17,7 @@ def user_creator_validator(request: any) -> None:
     body_validator = Validator({
         "full_name": {"type": "string", "required": True, "empty": False},
         "email": {"type": "string", "required": True, "empty": False, "regex": r'^\S+@\S+\.\S+$'},
-        "cpf": {"type": "string", "required": True, "empty": False, "regex": r'^\d{11}$'},
+        "cpf": {"type": "string", "required": False, "empty": True, "regex": r'^\d{11}$'},
         "smartphone": {"type": "string", "required": True, "empty": False, "regex": r'^\d{10}$'},
         "password": {"type": "string", "required": True, "empty": False},
         "roles": {"type": "string", "required": True, "empty": False},

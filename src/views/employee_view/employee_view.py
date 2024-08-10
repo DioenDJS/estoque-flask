@@ -15,6 +15,13 @@ class EmployeeView:
         return HttpResponse(status_code=201, body=result)
 
 
+    def update_employee(self, id: str, http_request: HttpRequest) -> HttpResponse:
+        body = http_request.body
+
+        result = self.employee_controller.update(id, body)
+
+        return HttpResponse(status_code=201, body=result)
+
     def find_all_view(self) -> HttpResponse:
 
         result = self.employee_controller.find_all()

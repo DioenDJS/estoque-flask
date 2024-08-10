@@ -14,3 +14,13 @@ class UserView:
         result = user_controller.create(body)
 
         return HttpResponse(status_code=201, body=result)
+
+
+    def validate_code_user(self, http_request:HttpRequest) -> HttpResponse:
+        user_controller = UserController()
+
+        body = http_request.body
+
+        result = user_controller.check_Validation_send_verification_code(body)
+
+        return HttpResponse(status_code=201, body=result)

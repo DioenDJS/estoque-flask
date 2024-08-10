@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="accountSettings">
-    <option name="activeRegion" value="sa-east-1" />
+    <option name="activeProfile" value="profile:perfil1" />
+    <option name="activeRegion" value="us-east-2" />
     <option name="recentlyUsedProfiles">
       <list>
+        <option value="profile:perfil1" />
+        <option value="profile:default" />
         <option value="profile:dioendcursolambda" />
       </list>
     </option>
     <option name="recentlyUsedRegions">
       <list>
+        <option value="us-east-2" />
         <option value="sa-east-1" />
         <option value="sa-east-2" />
       </list>

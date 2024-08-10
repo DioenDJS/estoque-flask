@@ -4,6 +4,7 @@ from src.views.http_types.http_request import HttpRequest
 from src.views.user_view.user_view import UserView
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
+user_view = UserView()
 
 user_routes_bp = Blueprint('user_routes', __name__)
 
@@ -13,12 +14,24 @@ user_routes_bp = Blueprint('user_routes', __name__)
 def create_user():
     resp = None
     try:
-        user_view = UserView()
+
         user_creator_validator(request)
 
         http_request = HttpRequest(body=request.json)
 
         resp = user_view.validate_and_create_user(http_request)
+    except Exception as e:
+        print(e)
+        resp = jsonify({"error": str(e)}), 500
+    return jsonify(resp.body), resp.status_code[0]
+
+
+@user_routes_bp.route('/user/validateCode', methods=["POST"])
+def validateUserCode():
+    resp = None
+    try:
+        http_request = HttpRequest(body=request.json)
+        resp = user_view.validate_code_user(http_request)
     except Exception as e:
         print(e)
         resp = jsonify({"error": str(e)}), 500

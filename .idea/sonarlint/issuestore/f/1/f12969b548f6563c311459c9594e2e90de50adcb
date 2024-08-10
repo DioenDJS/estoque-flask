@@ -1,0 +1,4 @@
+
+‚python:S1001"kRename method "check_Validation_send_verification_code" to match the regular expression ^[a-z_][a-z0-9_]*$.(Åä¶¸
+~python:S1005"gRename method "__Validation_send_verification_code" to match the regular expression ^[a-z_][a-z0-9_]*$.(²Èì
+fpython:S5632;"IChange this code so that it raises an object deriving from BaseException.(ïÒ¿Íúÿÿÿÿ
